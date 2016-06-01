@@ -6,6 +6,13 @@ var faker = require('faker');
 var category = require('../models/category');
 var product = require('../models/product');
 
+
+router.get('/products', function(req, res, next){
+	var products = product.paginate(req, res, next);
+	res.json(products);
+	//res.render('admin/products');
+});
+
 router.get('/:name', function(req, res, next){
 
 	async.waterfall([

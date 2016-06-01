@@ -9,6 +9,7 @@ var cookieParser = require('cookie-parser');
 var flash = require('express-flash');
 var MongoStore = require('connect-mongo/es5')(session);
 var passport = require('passport');
+var ejsLocals = require('ejs-locals');
 
 
 var config = require('./config/config');
@@ -56,6 +57,7 @@ app.use(function(req, res, next) {
 
 app.engine('ejs', engine);
 app.set('view engine', 'ejs');
+
 
 var mainRoutes = require('./routes/main');
 var userRoutes = require('./routes/user');

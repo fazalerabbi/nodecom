@@ -1,5 +1,26 @@
 var router 		= require('express').Router();
 var category 	= require('../models/category');
+var product 	= require('../modules/product');
+
+
+router.get('/dashboard', function(req, res, next){
+	res.render('admin/dashboard');
+});
+
+router.get('/products', function(req, res, next){
+	console.log(req.params.page);
+	var productObj = new product();
+	var products = productObj.paginate(req, res, next, function(products){
+		res.json( products );
+	});
+});
+router.get('/products/:page', function(req, res, next){
+	console.log(req.params.page);
+	var productObj = new product();
+	var products = productObj.paginate(req, res, next, function(products){
+		res.json( products );
+	});
+});
 
 
 router.get('/add-category', function(req, res, next){

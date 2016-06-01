@@ -37,6 +37,10 @@ router.get('/', function(req, res, next){
 		product.count().exec(function(err, count) {
 				if(err) return next(err);
 				res.render('site/index');
+				/*res.json({
+					products: products,
+					pages: Math.floor(count/perpage)
+				});*/
 				/*res.render('main/product-main', {
 					products: products,
 					pages: count/perpage
