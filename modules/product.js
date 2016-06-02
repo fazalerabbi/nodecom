@@ -28,5 +28,13 @@ Product.prototype.paginate = function(req, res, next, callback){
 		});
 	});
 }
+Product.prototype.getSingleProduct = function(req, res, next, callback) {
+	var id = req.params.id || null;
+	if(id == null) {
+		console.log(id);
+	}
+	productModel
+	.find({_id: red.params})
+} 
 
 module.exports = Product;

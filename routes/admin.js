@@ -23,6 +23,10 @@ router.get('/products/:page', function(req, res, next){
 	});
 });
 
+router.get('/product/edit/:id', function(){
+	
+});
+
 
 router.get('/add-category', function(req, res, next){
 	res.render('admin/add-category'), {message: req.flash('success')}

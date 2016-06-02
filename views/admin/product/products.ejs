@@ -13,9 +13,9 @@
                 <thead>
                 <tr class="row">
                   <th class="col-xs-2" >ID</th>
-                  <th class="col-xs-4">Image</th>
-                  <th class="col-xs-3">Name</th>
-                  <th class="col-xs-3">Action</th>
+                  <th class="col-xs-2" >Name</th>
+                  <th class="col-xs-4" data-orderable="false">Image</th>
+                  <th class="col-xs-3" data-orderable="false">Action</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -23,10 +23,10 @@
                 <% for(var i=0; i < count; i++) { %>
                    <tr class="row">
                     <td class="col-xs-2"><%= data.products[i]._id   %></td>
+                    <td class="col-xs-3"><%= data.products[i].name  %></td>
                     <td class="col-xs-4">
                       <img src="<%= data.products[i].image %>" class="img-circle" width="200px" height="200px" style="display:none;"/>
                     </td>
-                    <td class="col-xs-3"><%= data.products[i].name  %></td>
                     <td class="col-xs-3">
                       <a href="/admin/product/edit/<%= data.products[i]._id%>" class="btn btn-primary">Edit</a>
                       <a href="/admin/product/delete/<%= data.products[i]._id%>" class="btn btn-danger">Delete</a>
