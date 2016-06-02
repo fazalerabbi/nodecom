@@ -10,15 +10,16 @@ router.get('/dashboard', function(req, res, next){
 router.get('/products', function(req, res, next){
 	console.log(req.params.page);
 	var productObj = new product();
-	var products = productObj.paginate(req, res, next, function(products){
-		res.json( products );
+	var products = productObj.paginate(req, res, next, function(data){
+		//res.json(data);
+		res.render('admin/product/products',{data: data});
 	});
 });
 router.get('/products/:page', function(req, res, next){
 	console.log(req.params.page);
 	var productObj = new product();
-	var products = productObj.paginate(req, res, next, function(products){
-		res.json( products );
+	var products = productObj.paginate(req, res, next, function(data){
+		res.render('admin/product/products',{data: data});
 	});
 });
 

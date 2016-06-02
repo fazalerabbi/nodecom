@@ -17,7 +17,8 @@ Product.prototype.paginate = function(req, res, next, callback){
 				//res.render('site/index');
 				response = {
 					products: products,
-					pages: Math.floor(count/perpage)
+					pages: Math.floor(count/perpage),
+					page: page
 				};
 				callback(response);
 				/*res.render('main/product-main', {
