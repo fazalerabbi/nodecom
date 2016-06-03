@@ -1,6 +1,12 @@
+var async 			= require('async');
 var productModel 	= require('../models/product');
-var Product =  function () {};
+var category 		= require('./category');
 
+var Product 		=  function () {};
+
+/**
+ * Pagination	
+*/
 Product.prototype.paginate = function(req, res, next, callback){
 	var perpage = 9;
 	var page = req.params.page || 1; // if page is not defined then set page to 1
@@ -28,13 +34,78 @@ Product.prototype.paginate = function(req, res, next, callback){
 		});
 	});
 }
-Product.prototype.getSingleProduct = function(req, res, next, callback) {
+
+//get single product
+Product.prototype.getSingleProduct = function(req, res, next, callbackMain) {
 	var id = req.params.id || null;
+	
 	if(id == null) {
 		console.log(id);
+		return false;
 	}
-	productModel
-	.find({_id: red.params})
+	async.waterfall(
+		[
+			function(callback) {
+				var categoryModule = new category();
+				categoryModule.getAllCategories(function(categories){
+					callback(null, categories);
+				});
+			},
+			function(categories){
+				productModel
+				.findOne({ _id: req.params.id }, function(err, product){
+					if(err) return err;
+
+					var response = {
+						product: product,
+						categories: categories
+					};
+					
+					callbackMain( response );
+				});
+			}
+		]);
 } 
+
+// create or update the product
+Product.prototype.save = function(req, res, next, callback){
+	
+
+	if(req.body._id) {
+		productModel
+		.update(
+				{ _id: req.body._id }, 
+				{ 
+					category : req.body.category, 
+					name	 : req.body.name,
+					price	 : req.body.price,
+
+				}, { multi: false }, function(err, number){
+					callback(req.body._id);
+				});		
+		/*productModel.findOne({ _id: req.body._id }, function (err, p){
+			if(err) return err;
+
+		  	p.category = req.body.category;
+			p.name = req.body.name;
+			p.price = req.body.price;
+		  	p.visits.$inc();
+		  	p.save();
+		  	callback(null, p);
+		});*/
+	} else {
+		var productObj = new productModel();
+		productObj.category = req.body.category;
+		productObj.name = req.body.name;
+		productObj.price = req.body.price;
+		productObj.save(function(err, newproduct){
+			if(err) return err;
+			callback(null, newproduct._id);
+		});
+	}
+
+	
+
+}
 
 module.exports = Product;
