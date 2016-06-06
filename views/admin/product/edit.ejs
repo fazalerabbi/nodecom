@@ -2,6 +2,7 @@
 <div class="col-xs-6">
 	<div class="box-header with-border">
 	  <h3 class="box-title">Edit Product</h3>
+		<a href="/admin/product/create" class="btn btn-primary pull-right">Create product</a>
 	</div>
 	<% if(success_message.length > 0){ %>
 		<div class="alert alert-success alert-dismissible">
@@ -12,7 +13,7 @@
 		</div>
 	<% } %>
 	<div class="box-body">
-	  <form role="form" method="POST" action="/admin/product/edit">
+	  <form role="form" method="POST" action="/admin/product/edit" >
 	  	<input type="hidden" name="_id" value="<%= (product) ? product._id : null   %>"/>
 	    <div class="form-group">
 	      <label class="control-label" for="inputError"><i class="fa fa-times-circle-o"></i> Name</label>
@@ -31,12 +32,16 @@
                   <option selected="selected">Select Category</option>
                   <% var totalCategories = categories.length; %>
                   <% for(i = 0; i < totalCategories; i++){ %>
+										<% if(product != null) { %>
                   		<% if( categories[i]._id == product.category.toString() ) {%>
                   			<option value="<%= categories[i]._id%>" selected><%=: categories[i].name | capitalize%></option>
                   		<%} else{%>
-                  			<option value="<%= categories[i]._id%>"><%=: categories[i].name | capitalize%></option>	
+                  			<option value="<%= categories[i]._id%>"><%=: categories[i].name | capitalize%></option>
                   		<%}%>
-                  <%} %>
+										<% }else { %>
+												<option value="<%= categories[i]._id%>"><%=: categories[i].name | capitalize%></option>
+                  	<%}
+										} %>
                 </select>
               </div>
 	      <span class="help-block">Help block with error</span>
@@ -48,7 +53,7 @@
 	    </div>
 	    <div class="form-group">
 	      <button type="submit" class="btn btn-primary" value="save">Save</button>
-	      
+
 	    </div>
 	  </form>
 	</div>

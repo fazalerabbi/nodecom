@@ -5,7 +5,7 @@ var category 		= require('./category');
 var Product 		=  function () {};
 
 /**
- * Pagination	
+ * Pagination
 */
 Product.prototype.paginate = function(req, res, next, callback){
 	var perpage = 9;
@@ -38,7 +38,7 @@ Product.prototype.paginate = function(req, res, next, callback){
 //get single product
 Product.prototype.getSingleProduct = function(req, res, next, callbackMain) {
 	var id = req.params.id || null;
-	
+
 	if(id == null) {
 		console.log(id);
 		return false;
@@ -60,52 +60,37 @@ Product.prototype.getSingleProduct = function(req, res, next, callbackMain) {
 						product: product,
 						categories: categories
 					};
-					
+
 					callbackMain( response );
 				});
 			}
 		]);
-} 
+}
 
 // create or update the product
 Product.prototype.save = function(req, res, next, callback){
-	
-
-	if(req.body._id) {
+	if(req.body._id != 'null') {
 		productModel
 		.update(
-				{ _id: req.body._id }, 
-				{ 
-					category : req.body.category, 
+				{ _id: req.body._id },
+				{
+					category : req.body.category,
 					name	 : req.body.name,
 					price	 : req.body.price,
 
 				}, { multi: false }, function(err, number){
 					callback(req.body._id);
-				});		
-		/*productModel.findOne({ _id: req.body._id }, function (err, p){
-			if(err) return err;
-
-		  	p.category = req.body.category;
-			p.name = req.body.name;
-			p.price = req.body.price;
-		  	p.visits.$inc();
-		  	p.save();
-		  	callback(null, p);
-		});*/
+				});
 	} else {
 		var productObj = new productModel();
 		productObj.category = req.body.category;
 		productObj.name = req.body.name;
 		productObj.price = req.body.price;
 		productObj.save(function(err, newproduct){
-			if(err) return err;
-			callback(null, newproduct._id);
+			if(err) return next(err);
+			callback(newproduct._id);
 		});
 	}
-
-	
-
 }
 
 module.exports = Product;
