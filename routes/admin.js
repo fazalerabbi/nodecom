@@ -2,26 +2,28 @@ var router 		= require('express').Router();
 var product 	= require('../modules/product');
 var category 	= require('../modules/category');
 
-
+// admin dashboard
 router.get('/dashboard', function(req, res, next){
 	res.render('admin/dashboard');
 });
 
+// products listing page
 router.get('/products', function(req, res, next){
-	console.log(req.params.page);
 	var productObj = new product();
 	var products = productObj.paginate(req, res, next, function(data) {
-		res.render('admin/product/products',{data: data});
+		res.render('admin/product/products',{data: data, success: req.flash("success")});
 	});
 });
 
+// paginate the product listing page
 router.get('/products/:page', function(req, res, next){
 	var productObj = new product();
 	var products = productObj.paginate(req, res, next, function(data){
-		res.render('admin/product/products',{data: data});
+		res.render('admin/product/products',{data: data, success: req.flash("success")});
 	});
 });
 
+// load the create product template
 router.get('/product/create', function(req, res, next) {
 	var categoryObj = new category();
 	var render = categoryObj.getAllCategories(function(categories){
@@ -32,14 +34,16 @@ router.get('/product/create', function(req, res, next) {
 				});
 	});
 });
+
+// edit the product
 router.get('/product/edit/:id', function(req, res, next){
 	var productObj = new product();
-
 	response = productObj.getSingleProduct(req, res, next, function(response) {
 		res.render('admin/product/edit', { product: response.product, categories: response.categories, success_message: req.flash('success_message') });
 	});
 });
 
+// save/update the product
 router.post('/product/edit', function(req, res, next){
 	var productObj = new product();
 
@@ -50,8 +54,13 @@ router.post('/product/edit', function(req, res, next){
 	});
 });
 
-router.delete('/product/delete', function(req, res, next) {
+// delete the product
+router.get('/product/delete/:id', function(req, res, next) {
 		var productObj = new product();
+		var deleted = productObj.delete(req, res, next, function(deletedProduct) {
+			req.flash("success", "Deleted successfully.");
+			return res.redirect('/admin/products');
+		});
 });
 
 router.get('/add-category', function(req, res, next){

@@ -9,8 +9,14 @@ var Product 		=  function () {};
 */
 Product.prototype.paginate = function(req, res, next, callback){
 	var perpage = 9;
-	var page = req.params.page || 1; // if page is not defined then set page to 1
 	var response = [];
+	var page = req.params.page;
+	// if page is not defined then set page to 1
+	if(req.params.page == null) {
+		page = 1;
+	}
+	page = page - 1;
+
 	productModel
 	.find()
 	.skip( perpage * page )
@@ -93,4 +99,11 @@ Product.prototype.save = function(req, res, next, callback){
 	}
 }
 
+//delete the product
+Product.prototype.delete = function(req, res, next, callbackMain){
+	productModel.remove({_id: req.params.id}, function(err){
+    if(err) return next(err);
+		callbackMain(req.params.id);
+	});
+}
 module.exports = Product;
